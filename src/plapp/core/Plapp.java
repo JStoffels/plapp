@@ -3,27 +3,30 @@ package plapp.core;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 public class Plapp {
 
-    //private static final Logger LOGGER = Logger.getLogger(Plapp.class);
-    private String baseDir = "C:/Users/Joey/Google Drive/plapp/";
+    private static final Logger LOGGER = Logger.getLogger(Plapp.class);
 
     public static void main(String[] args) {
+        PropertyConfigurator.configure("log4j.properties");
         new Plapp();
     }
 
     private Plapp() {
+        String baseDir = "C:/Users/Joey/Google Drive/plapp/";
         File file = new File(baseDir + "docA.docx");
 
         try {
             printFileContent(file);
         } catch (FileNotFoundException e) {
-            //
+            LOGGER.error("File not found!");
         }
     }
 
@@ -32,11 +35,10 @@ public class Plapp {
 
         try (XWPFDocument doc = new XWPFDocument(fis)) {
             XWPFWordExtractor we = new XWPFWordExtractor(doc);
-            System.out.println(we.getText());
-            //LOGGER.info(we.getText());
+            LOGGER.info(we.getText());
             we.close();
         } catch (Exception e) {
-            //LOGGER.info("error while printing content");
+            LOGGER.error("Error while printing content!");
         }
     }
 }
